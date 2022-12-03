@@ -1985,7 +1985,7 @@ class Boxes:
             :param x:
             :param y:
             :param r:
-            :param b:
+            :par,am b:
             :param posx:
             :param posy:
 
@@ -2729,7 +2729,11 @@ class Boxes:
             else:
                 length_correction = 0.0
             l -= length_correction
+<<<<<<< HEAD
             edge = edges[(i/2)%len(edges)]
+=======
+            edge = edges[(i//2)%len(edges)]
+>>>>>>> feature/polygon_wall_edges
             edge(l)
             self.edge(length_correction)
             self.corner(next_angle, tabs=1)

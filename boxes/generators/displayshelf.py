@@ -80,16 +80,14 @@ class DisplayShelf(Boxes): # change class name here and below
                 modified_hypotenuse = width / math.cos(a)
                 m = math.sqrt((modified_hypotenuse ** 2) - (width ** 2))
                 modified_height = unmodified_segment_height + lip_height + m
+                edges = 'eeeF'
                 borders = [width, 90, unmodified_segment_height + lip_height, 90-self.angle, modified_hypotenuse, 90+self.angle, modified_height, 90]
             else:
-                missing_top = math.sqrt((hypotenuse ** 2) - (m ** 2))
+                edges = 'eeeeF'
                 borders = [width, 90, unmodified_segment_height + lip_height, 90-self.angle, hypotenuse, self.angle, top_width, 90, height, 90]
 
-            if self.debug:
-                labelText = f'width: {width}, top_width: {top_width}, missing_top: {missing_top}, expected: {width-top_width}\nhypotenuse: {hypotenuse}, lip_height: {lip_height}, m: {m}, unmodified_segment_height: {unmodified_segment_height}'
-                self.rectangularWall(width,height, move="up", label=labelText)
-            self.polygonWall(borders, edge='f', callback=[self.generate_finger_holes], move="up")
-            self.polygonWall(borders, edge='f', callback=[self.generate_finger_holes], move="up")
+            self.polygonWall(borders, edge=edges, callback=[self.generate_finger_holes], move="up", label="left side")
+            self.polygonWall(borders, edge=edges, callback=[self.generate_finger_holes], move="up", label='right side')
         else:
             edges = "eeee"
             if self.include_back:

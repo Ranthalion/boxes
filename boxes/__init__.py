@@ -2704,10 +2704,6 @@ class Boxes:
         :param label: rendered to identify parts, it is not ment to be cut or etched (Default value = "")
 
         """
-        #TODO: [ML] Implement label (maybe done?)
-        #TODO: [ML] Implement multiple edges
-
-        #e = self.edges.get(edge, edge)
         edges = [self.edges.get(e, e) for e in edge]
         t = self.thickness # XXX edge.margin()
 
@@ -2733,7 +2729,7 @@ class Boxes:
             else:
                 length_correction = 0.0
             l -= length_correction
-            edge = edges[i%len(edges)]
+            edge = edges[(i/2)%len(edges)]
             edge(l)
             self.edge(length_correction)
             self.corner(next_angle, tabs=1)

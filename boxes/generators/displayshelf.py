@@ -15,9 +15,9 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from boxes import *
+from boxes.walledges import _WallMountedBox
 
-
-class DisplayShelf(Boxes):
+class DisplayShelf(_WallMountedBox):
     """Shelf with slanted floors"""
 
     ui_group = "Shelf"
@@ -38,9 +38,7 @@ class DisplayShelf(Boxes):
     divider_wall_height: float
 
     def __init__(self) -> None:
-        Boxes.__init__(self)
-
-        self.addSettingsArgs(edges.FingerJointSettings)
+        super().__init__()
 
         self.buildArgParser(sx="400", y=100, h=300, outside=True)
         self.argparser.add_argument(
@@ -95,14 +93,15 @@ class DisplayShelf(Boxes):
         front = height - vertical_cut
 
         borders = [width, 90, front, 90 - self.angle, hypotenuse, self.angle, top, 90, height, 90]
-        edges = 'eeeef' if self.include_back else 'e'
+        #edges = 'eeeef' if self.include_back else 'e'
+        edges = 'eeeeb' if self.include_back else 'eeeea'
         self.polygonWall(borders, edge=edges, callback=[self.generate_finger_holes], move="up", label="left side")
         self.polygonWall(borders, edge=edges, callback=[self.generate_finger_holes], move="up", label="right side")
 
     def generate_rectangular_sides(self, width, height):
-        edges = "eeee"
+        edges = "eeea" #eeee
         if self.include_back:
-            edges = "eeef"
+            edges = "eeeb" #"eeef"
         self.rectangularWall(width, height, edges, callback=[self.generate_finger_holes], move="up", label="left side")
         self.rectangularWall(width, height, edges, callback=[self.generate_finger_holes], move="up", label="right side")
 
@@ -170,6 +169,7 @@ class DisplayShelf(Boxes):
                 self.rectangularWall(self.sl, self.divider_wall_height, edges_, move="up", label=f"divider {j + 1} for shelf {i + 1}")
 
     def render(self):
+        self.generateWallEdges()
         # adjust to the variables you want in the local scope
         sx, y, h = self.sx, self.y, self.h
         front = self.front_wall_height
@@ -194,4 +194,5 @@ class DisplayShelf(Boxes):
         self.generate_dividers()
 
         if self.include_back:
-            self.rectangularWall(x, h, "eFeF", label="back wall", move="up")
+            #self.rectangularWall(x, h, "eFeF", label="back wall", move="up")
+            self.rectangularWall(x, h, "ecec", label="back wall", move="up")

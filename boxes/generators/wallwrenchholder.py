@@ -77,19 +77,19 @@ class WallWrenchHolder(_WallMountedBox):
 
     def render(self):
         self.generateWallEdges()
-
+        
         h = ((self.min_strength + self.max_strength) * self.number * 2**0.5
-             +  self.extra_distance * (self.number - 1)
-             + self.max_width)
+            +  self.extra_distance * (self.number - 1)
+            + self.max_width)
         t = self.thickness
         x = self.x-2*t
         
         self.rectangularWall(self.depth, h,
                              ["e", "B", "e", SlottedEdge(self, None)],
                              move="right")
-        self.rectangularWall(self.depth, h,
-                             ["e", "B", "e", SlottedEdge(self, None)],
-                             move="right")
-        self.rectangularWall(x, h, "eDed",
-            # callback=[lambda:self.fingerHolesAt(x/2, 0, h, 90)],
-            move="right")
+        # self.rectangularWall(self.depth, h,
+        #                      ["e", "B", "e", SlottedEdge(self, None)],
+        #                      move="right")
+        # self.rectangularWall(x, h, "eDed",
+        #     # callback=[lambda:self.fingerHolesAt(x/2, 0, h, 90)],
+        #     move="right")

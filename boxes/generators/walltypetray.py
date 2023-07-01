@@ -31,6 +31,9 @@ class WallTypeTray(_WallMountedBox, _TopEdge):
         self.argparser.add_argument(
             "--radius",  action="store", type=float, default=0.0,
             help="radius for strengthening walls with the hooks")
+        self.argparser.add_argument(
+            "--open_front", action="store", type=boolarg, default=False,
+            help="Removet the front panel")
         
 
     def xSlots(self):
@@ -90,13 +93,16 @@ class WallTypeTray(_WallMountedBox, _TopEdge):
         self.ctx.save()
 
         # outer walls
-        self.rectangularWall(x, h, [b, "f", "e", "f"], callback=[self.xHoles],  move="up")
+        if not self.open_front:
+            self.rectangularWall(x, h, [b, "f", "e", "f"], callback=[self.xHoles], move="up")
         self.rectangularWall(x, h+bh, [b, "C", "e", "c"], callback=[self.mirrorX(self.xHoles, x), ], move="up")
 
         # floor
         if b != "e":
-            self.rectangularWall(x, y, "ffff", callback=[
-                self.xSlots, self.ySlots], move="up")
+            if self.open_front:
+                self.rectangularWall(x, y, "ffef", callback=[self.xSlots, self.ySlots], move="up")
+            else:
+                self.rectangularWall(x, y, "ffff", callback=[self.xSlots, self.ySlots], move="up")
 
         # Inner walls
 
@@ -111,15 +117,17 @@ class WallTypeTray(_WallMountedBox, _TopEdge):
         # y walls
 
         # outer walls
-        self.trapezoidSideWall(y, h, h+bh, [b, "B", "e", "h"], radius=self.radius, callback=[self.yHoles, ], move="up")
+        front_edge = "e" if self.open_front else "h"
+        self.trapezoidSideWall(y, h, h+bh, [b, "B", "e", front_edge], radius=self.radius, callback=[self.yHoles, ], move="up")
         self.moveTo(0, 8)
-        self.trapezoidSideWall(y, h+bh, h, [b, "h", "e", "b"], radius=self.radius, callback=[self.mirrorX(self.yHoles, y), ], move="up")
+        self.trapezoidSideWall(y, h+bh, h, [b, front_edge, "e", "b"], radius=self.radius, callback=[self.mirrorX(self.yHoles, y), ], move="up")
         self.moveTo(0, 8)
 
         # inner walls
         for i in range(len(self.sx) - 1):
+            front_edge = "e" if self.open_front else "f"
             e = [edges.SlottedEdge(self, self.sy, be, slots=0.5 * hi),
-                 "f", "e", "f"]
+                 front_edge, "e", "f"]
             self.rectangularWall(y, hi, e, move="up")
 
 
